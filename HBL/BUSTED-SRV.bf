@@ -39,7 +39,7 @@ io.displayAnalysisBanner ({"info" : "BUSTED (branch-site unrestricted statistica
 
 
 busted.rate_classes_omega = 3;
-busted.rate_classes_alpha = 5;
+busted.rate_classes_alpha = 3;
 
 /*------------------------------------------------------------------------------ 
     BranchSiteTemplate Defines
