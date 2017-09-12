@@ -1739,6 +1739,6 @@ DataSet busted.codon_data = ReadDataFile(USE_NEXUS_FILE_DATA);
 DataSetFilter busted.filter.default = CreateFilter(busted.codon_data,3,"0-368","0-5","TAA,TAG,TGA");
 ASSUME_REVERSIBLE_MODELS=1;
 LikelihoodFunction ShLsBBNm.likelihoodFunction = (busted.filter.default,ShLsBBNm.tree_id_0);
-
+//fprintf(stdout, LIST_ALL_VARIABLES);
 
 END;

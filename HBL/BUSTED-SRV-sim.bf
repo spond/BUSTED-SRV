@@ -25,7 +25,7 @@ DATA_FILE_PRINT_FORMAT = 9; // FASTA
 
 for (repl = 1; repl < replicates; repl += 1) {
     fprintf (stdout, "Simulating replicate ", repl, " / ", replicates, "\n");
-    DataSet simfile = SimulateDataSet ( busted.LF );
+    DataSet simfile = SimulateDataSet (ShLsBBNm.likelihoodFunction );
     DataSetFilter simnucs = CreateFilter (simfile, 1);
     fprintf (sim_path + "_replicate." + repl, CLEAR_FILE, simnucs);
 }
@@ -75,9 +75,9 @@ function prompt_for_alphas (rate_count) {
     fprintf (stdout, "\nSpecify the alpha distribution to be used for simulation (remember that it will be normalized to have mean 1)\n");
     
     while (current_rate <= rate_count-1 && leftover_weight > 0) {
-        Eval ("busted.test.rv_gdd_rates_" + current_rate + " = " + prompt_for_a_value ("alpha rate [" + current_rate + "]", 2*current_rate / rate_count, 0, 1000,  0));
+        Eval ("busted.test.rv_gdd_rates_" + current_rate + " = " + prompt_for_a_value ("alpha rate [" + current_rate + "]", 2*(current_rate+1) / rate_count, 0, 1000,  0));
         if (current_rate < rate_count-1) {
-            new_weight = prompt_for_a_value ("alpha weight [" + current_rate + "]", leftover_weight / (rate_count - current_rate + 1), 0, leftover_weight,  0);
+            new_weight = prompt_for_a_value ("alpha weight [" + current_rate + "]", leftover_weight / (rate_count - current_rate), 0, leftover_weight,  0);
             Eval ("busted.test.rv_gdd_weights_" + current_rate + " = " + new_weight / leftover_weight);
             leftover_weight = leftover_weight - new_weight;
         }
@@ -94,8 +94,8 @@ function prompt_for_omegas (rate_count) {
     
     while (current_rate <= rate_count-1 && leftover_weight > 0) {
         if (current_rate < rate_count-1) {
-            Eval ("busted.test.omega" + current_rate + " = " + prompt_for_a_value ("omega [" + current_rate + "]", current_rate / rate_count, 0, 1,  0));
-            new_weight = prompt_for_a_value ("omega weight [" + current_rate + "]", leftover_weight / (rate_count - current_rate + 1), 0, leftover_weight,  0);
+            Eval ("busted.test.omega" + current_rate + " = " + prompt_for_a_value ("omega [" + current_rate + "]", (current_rate+1) / rate_count, 0, 1,  0));
+            new_weight = prompt_for_a_value ("omega weight [" + current_rate + "]", leftover_weight / (rate_count - current_rate ), 0, leftover_weight,  0);
             Eval ("busted.test.bsrel_mixture_aux_" + current_rate + " = " + new_weight / leftover_weight);
             leftover_weight = leftover_weight - new_weight;
         } else {
