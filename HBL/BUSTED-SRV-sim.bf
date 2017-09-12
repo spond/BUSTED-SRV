@@ -1,3 +1,4 @@
+RequireVersion ("2.31");
 LoadFunctionLibrary ("GrabBag");
 
 SetDialogPrompt ("Load a BUSTED likelihood function fit (BUSTED.lf.bf) extension:");
@@ -40,8 +41,8 @@ function report_loaded_fit () {
     omega.distribution = {omega.rates, 2};
     srv.distribution          = {srv.rates, 2};
     
-    extract_distribution (omega.distribution, omega.rates, "FG_omega_", "FG_f_", "1", );
-    extract_distribution (srv.distribution, srv.rates, "srv.syn_rate_", "srv.f_", "busted.srv.cat.normalizer");
+    extract_distribution (omega.distribution, omega.rates, "busted.test.omega", "busted.test.bsrel_mixture_aux_", "1", );
+    extract_distribution (srv.distribution, srv.rates, "busted.test.rv_gdd_rates_", "busted.test.rv_gdd_weights_", "busted.test.rv_gdd_norm");
    
     return { "sequences" : codon_filter.species,
              "sites" : codon_filter.sites, 
