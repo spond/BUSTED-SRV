@@ -127,6 +127,7 @@ function busted.model.srv.ModelDescription (type, code, components) {
 }
 
 
+//add function to extract the synonymous rates and weights
 function busted.srv.ExtractMixtureDistribution (srv){
 	 count = busted.srv_rate_classes;
     	 rates = {count, 1};
@@ -170,16 +171,11 @@ models.BindGlobalParameters ({"0" : busted.test.bsrel_model, "1" : busted.backgr
 busted.test_guess = busted.DistributionGuess(utility.Map (selection.io.extract_global_MLE_re (busted.final_partitioned_mg_results, "^" + terms.parameters.omega_ratio + ".+test.+"), "_value_",
             "_value_[terms.fit.MLE]"));
 
-//fprintf(stdout, "this is busted.final_partioned_mg_results: \n", busted.final_partitioned_mg_results, "\n");
-//busted.shit = selection.io.extract_global_MLE_re (busted.final_partitioned_mg_results, "^" + terms.parameters.omega_ratio + ".+test.+");
-
-//busted.test_srv_guess = busted.DistributionGuess(utility.Map (selection.io.extract.global_MLE_re (busted.final_partitioned_mg_results, "GDD rate" + ".+test.+"), "_value_","_value_[terms.fit.MLE]"));
-
-//fprintf( stdout, busted.shit);
 
 busted.srv.distribution = busted.srv.ExtractMixtureDistribution(busted.test.bsrel_model);
 busted.distribution = models.codon.BS_REL.ExtractMixtureDistribution(busted.test.bsrel_model);
-fprintf(stdout, "This is busted.distribution \n", busted.distribution);
+
+
 parameters.SetStickBreakingDistribution (busted.distribution, busted.test_guess);
 
 
@@ -230,23 +226,19 @@ io.ReportProgressMessageMD("BUSTED", "main", "* " + selection.io.report_fit (bus
 io.ReportProgressMessageMD("BUSTED", "main", "* For *test* branches, the following rate distribution for branch-site combinations was inferred");
 
 				     
- /*
+ 
    //Prints LF
-  // Export(lf_serialized, ^(busted.full_model[terms.likelihood_function]));
-  // fprintf(stdout, lf_serialized, "\n");
-   fprintf (stdout, "Check this: \n", );
-
-  busted.idk = ((srv[utility.getGlobalValue ("terms.parameters")])[utility.getGlobalValue ("terms.global")])[terms.AddCategory (utility.getGlobalValue ("terms.mixture.mixture_aux_weight"), 1 )];
-  fprintf (stdout, busted.test_guess, "\n", busted.idk, "\n" ,busted.test.bsrel_model);
-
+   Export(lf_serialized, ^(busted.full_model[terms.likelihood_function]));
+   fprintf(stdout, lf_serialized, "\n");
+  
    return 0;
-*/
+
 
 selection.io.stopTimer (busted.json [terms.json.timers], "Unconstrained BUSTED model fitting");
 
 busted.inferred_test_distribution = parameters.GetStickBreakingDistribution (busted.distribution) % 0;
 busted.srv.inferred_test_distribution = parameters.GetStickBreakingDistribution (busted.srv.distribution) % 0;
-fprintf(stdout, "What does this print? \n", busted.srv.inferred_test_distribution);
+
 selection.io.report_dnds (busted.inferred_test_distribution);
 
 
@@ -357,7 +349,7 @@ console.log ( "Likelihood ratio test for episodic diversifying positive selectio
 
 selection.io.stopTimer (busted.json [terms.json.timers], "Overall");
 
-fprintf(stdout, "this is a print: ", busted.test.rv_gdd, " \n this is the busted.srv.distribution: \n", busted.srv.distribution);
+
 
 io.SpoolJSON (busted.json, busted.codon_data_info [terms.json.json]);
 
