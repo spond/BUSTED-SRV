@@ -31,8 +31,8 @@ for (repl = 1; repl < replicates; repl += 1) {
 }
 
 function report_loaded_fit () {
-    GetInformation (omega.weights, "^FG_f_[0-9]+$");
-    GetInformation (srv.weights,   "^srv.f_[0-9]+$");
+    GetInformation (omega.weights, "^busted.test.bsrel_mixture_aux_[0-9]+$");
+    GetInformation (srv.weights,   "^busted.test.rv_gdd_weights_[0-9]+$");
     
     
     omega.rates = Columns (omega.weights) + 1;
@@ -44,8 +44,8 @@ function report_loaded_fit () {
     extract_distribution (omega.distribution, omega.rates, "busted.test.omega", "busted.test.bsrel_mixture_aux_", "1", );
     extract_distribution (srv.distribution, srv.rates, "busted.test.rv_gdd_rates_", "busted.test.rv_gdd_weights_", "busted.test.rv_gdd_norm");
    
-    return { "sequences" : codon_filter.species,
-             "sites" : codon_filter.sites, 
+    return { "sequences" : busted.codon_data.species,
+             "sites" : busted.codon_data.sites, 
              "alpha rate count" : srv.rates,
              "alpha distribution" :  srv.distribution,
              "omega rate count" : omega.rates,
@@ -56,13 +56,13 @@ function report_loaded_fit () {
 
 function extract_distribution (matrix, rates, rate_prefix, weight_prefix, normalizer) {
     left_over_weight = 1;
-    for (k = 1; k <= rates; k += 1) {
-        matrix [k-1][0] = Eval (rate_prefix + k + "/" + normalizer);
-        if (k < omega.rates) {
-            matrix [k-1][1] = left_over_weight * Eval (weight_prefix + k);
+    for (k = 0; k <= rates-1; k += 1) {
+        matrix [k][0] = Eval (rate_prefix + k + "/" + normalizer);
+        if (k < omega.rates-1) {
+            matrix [k][1] = left_over_weight * Eval (weight_prefix + k);
             left_over_weight = left_over_weight * (1-Eval (weight_prefix + k));
         } else {
-            matrix [k-1][1] = left_over_weight;    
+            matrix [k][1] = left_over_weight;    
         }
     }
 
