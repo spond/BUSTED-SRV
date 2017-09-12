@@ -9,8 +9,8 @@ LoadFunctionLibrary("libv3/tasks/alignments.bf");
 LoadFunctionLibrary("libv3/models/codon.bf");
 LoadFunctionLibrary("libv3/tasks/trees.bf");
 LoadFunctionLibrary("libv3/tasks/genetic_code.bf");
-LoadFunctionLibrary("modules/io_functions.ibf");
-LoadFunctionLibrary("modules/selection_lib.ibf");
+LoadFunctionLibrary("SelectionAnalyses/modules/io_functions.ibf");
+LoadFunctionLibrary("SelectionAnalyses/modules/selection_lib.ibf");
 LoadFunctionLibrary("libv3/models/codon/BS_REL.bf");
 LoadFunctionLibrary("libv3/convenience/math.bf");
 
@@ -58,7 +58,7 @@ busted.json    = { terms.json.analysis: busted.analysis_description,
 selection.io.startTimer (busted.json [terms.json.timers], "Overall", 0);
 
 namespace busted {
-    LoadFunctionLibrary ("modules/shared-load-file.bf");
+    LoadFunctionLibrary ("SelectionAnalyses/modules/shared-load-file.bf");
     load_file ("busted");
 }
 
