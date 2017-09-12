@@ -70,15 +70,15 @@ function extract_distribution (matrix, rates, rate_prefix, weight_prefix, normal
 
 function prompt_for_alphas (rate_count) {
     leftover_weight = 1;
-    current_rate     = 1;
+    current_rate     = 0;
     
     fprintf (stdout, "\nSpecify the alpha distribution to be used for simulation (remember that it will be normalized to have mean 1)\n");
     
-    while (current_rate <= rate_count && leftover_weight > 0) {
-        Eval ("srv.syn_rate_" + current_rate + " = " + prompt_for_a_value ("alpha rate [" + current_rate + "]", 2*current_rate / rate_count, 0, 1000,  0));
-        if (current_rate < rate_count) {
+    while (current_rate <= rate_count-1 && leftover_weight > 0) {
+        Eval ("busted.test.rv_gdd_rates_" + current_rate + " = " + prompt_for_a_value ("alpha rate [" + current_rate + "]", 2*current_rate / rate_count, 0, 1000,  0));
+        if (current_rate < rate_count-1) {
             new_weight = prompt_for_a_value ("alpha weight [" + current_rate + "]", leftover_weight / (rate_count - current_rate + 1), 0, leftover_weight,  0);
-            Eval ("srv.f_" + current_rate + " = " + new_weight / leftover_weight);
+            Eval ("busted.test.rv_gdd_weights_" + current_rate + " = " + new_weight / leftover_weight);
             leftover_weight = leftover_weight - new_weight;
         }
         //prompt_for_a_value ("
@@ -88,18 +88,18 @@ function prompt_for_alphas (rate_count) {
 
 function prompt_for_omegas (rate_count) {
     leftover_weight = 1;
-    current_rate     = 1;
+    current_rate     = 0;
     
     fprintf (stdout, "\nSpecify the alpha omega to be used for simulation (remember that only the last omega value is permitted to be in the [1, infty) range)\n");
     
-    while (current_rate <= rate_count && leftover_weight > 0) {
-        if (current_rate < rate_count) {
-            Eval ("FG_omega_" + current_rate + " = " + prompt_for_a_value ("omega [" + current_rate + "]", current_rate / rate_count, 0, 1,  0));
+    while (current_rate <= rate_count-1 && leftover_weight > 0) {
+        if (current_rate < rate_count-1) {
+            Eval ("busted.test.omega" + current_rate + " = " + prompt_for_a_value ("omega [" + current_rate + "]", current_rate / rate_count, 0, 1,  0));
             new_weight = prompt_for_a_value ("omega weight [" + current_rate + "]", leftover_weight / (rate_count - current_rate + 1), 0, leftover_weight,  0);
-            Eval ("FG_f_" + current_rate + " = " + new_weight / leftover_weight);
+            Eval ("busted.test.bsrel_mixture_aux_" + current_rate + " = " + new_weight / leftover_weight);
             leftover_weight = leftover_weight - new_weight;
         } else {
-            Eval ("FG_omega_" + current_rate + " = " + prompt_for_a_value ("omega [" + current_rate + "]", 3, 1, 1000,  0));
+            Eval ("busted.test.omega" + current_rate + " = " + prompt_for_a_value ("omega [" + current_rate + "]", 3, 1, 1000,  0));
         
         }
         //prompt_for_a_value ("
