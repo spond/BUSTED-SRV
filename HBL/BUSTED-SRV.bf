@@ -259,8 +259,8 @@ if (busted.has_background) {
                                                          "_index_",
                                                          "{terms.json.omega_ratio : busted.inferred_background_distribution [_index_][0],
                                                            terms.json.proportion : busted.inferred_background_distribution [_index_][1],
-							   "SRV_rate" : busted.srv.inferred_test_distribution [_index_][0],
-							   "SRV_weight" : busted.srv.inferred_test_distribution [_index_][1]}");
+							   busted.SRV_rate : busted.srv.inferred_test_distribution [_index_][0],
+							   busted.SRV_weight : busted.srv.inferred_test_distribution [_index_][1]}");
 }
 
 
@@ -318,9 +318,9 @@ if (!busted.run_test) {
                                                          "_index_",
                                                          "{terms.json.omega_ratio : busted.inferred_test_distribution [_index_][0],
                                                            terms.json.proportion : busted.inferred_test_distribution [_index_][1],
-							   "SRV_rate" : busted.srv.inferred_test_distribution [_index_][0],
-                                                           "SRV_weight" : busted.srv.inferred_test_distribution [_index_][1]}")
-							   };
+							   busted.SRV_rate : busted.srv.inferred_test_distribution [_index_][0],
+                                                           busted.SRV_weight : busted.srv.inferred_test_distribution [_index_][1]}")
+				    };
 
     if (busted.has_background) {
         busted.inferred_background_distribution = parameters.GetStickBreakingDistribution (busted.background_distribution) % 0;
