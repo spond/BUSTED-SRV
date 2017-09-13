@@ -1,0 +1,119 @@
+Job 311543
+Array index 4
+
+Analysis Description
+--------------------
+BUSTED-SRV (branch-site unrestricted statistical test of episodic
+diversification with synonymous rate variation) uses a random effects
+branch-site model fitted jointly to all or a subset of tree branches in
+order to test for alignment-wide evidence of episodic diversifying
+selection. Assuming there is evidence of positive selection (i.e. there
+is an omega > 1), BUSTED will also perform a quick evidence-ratio style
+analysis to explore which individual sites may have been subject to
+selection.
+
+- __Requirements__: in-frame codon alignment and a phylogenetic tree (optionally annotated
+with {})
+
+- __Citation__: *Gene-wide identification of episodic selection*, Mol Biol Evol.
+32(5):1365-71
+
+- __Written by__: Sergei L Kosakovsky Pond
+
+- __Contact Information__: spond@temple.edu
+
+- __Analysis Version__: 1.2
+
+
+
+####Choose Genetic Code
+
+1. [**Universal**] Universal code. (Genebank transl_table=1).
+2. [**Vertebrate mtDNA**] Vertebrate mitochondrial DNA code. (Genebank transl_table=2).
+3. [**Yeast mtDNA**] Yeast mitochondrial DNA code. (Genebank transl_table=3).
+4. [**Mold/Protozoan mtDNA**] Mold, Protozoan and Coelenterate mitochondrial DNA and the Mycloplasma/Spiroplasma code. (Genebank transl_table=4).
+5. [**Invertebrate mtDNA**] Invertebrate mitochondrial DNA code. (Genebank transl_table=5).
+6. [**Ciliate Nuclear**] Ciliate, Dasycladacean and Hexamita Nuclear code. (Genebank transl_table=6).
+7. [**Echinoderm mtDNA**] Echinoderm mitochondrial DNA code. (Genebank transl_table=9).
+8. [**Euplotid Nuclear**] Euplotid Nuclear code. (Genebank transl_table=10).
+9. [**Alt. Yeast Nuclear**] Alternative Yeast Nuclear code. (Genebank transl_table=12).
+10. [**Ascidian mtDNA**] Ascidian mitochondrial DNA code. (Genebank transl_table=13).
+11. [**Flatworm mtDNA**] Flatworm mitochondrial DNA code. (Genebank transl_table=14).
+12. [**Blepharisma Nuclear**] Blepharisma Nuclear code. (Genebank transl_table=15).
+13. [**Chlorophycean mtDNA**] Chlorophycean Mitochondrial Code (transl_table=16).
+14. [**Trematode mtDNA**] Trematode Mitochondrial Code (transl_table=21).
+15. [**Scenedesmus obliquus mtDNA**] Scenedesmus obliquus mitochondrial Code (transl_table=22).
+16. [**Thraustochytrium mtDNA**] Thraustochytrium Mitochondrial Code (transl_table=23).
+17. [**Pterobranchia mtDNA**] Pterobranchia Mitochondrial Code (transl_table=24).
+18. [**SR1 and Gracilibacteria**] Candidate Division SR1 and Gracilibacteria Code (transl_table=25).
+19. [**Pachysolen Nuclear**] Pachysolen tannophilus Nuclear Code (transl_table=26).
+
+>Please choose an option (or press q to cancel selection):
+
+>Select a coding sequence alignment file (`/home3/sadie/BUSTED-SRV/HBL/`) 
+
+>A tree was found in the data file: `(((((AC133103_6_MOUSE,AC132444_5_MOUSE)NODE_3,AC132444_3_MOUSE)NODE_5,AC133103_7_MOUSE)NODE_7,AC125149_3_MOUSE)NODE_9,GM10553_MOUSE)`
+
+>Would you like to use it (y/n)? 
+
+>Loaded a multiple sequence alignment with **6** sequences, **123** codons, and **1** partitions from `/home3/sadie/BUSTED-SRV/data/sim_replicate.4`
+
+
+####Choose the set of branches to test for selection
+
+1. [**All**] Include all branches in the analysis
+2. [**Internal**] Include all internal branches in the analysis
+3. [**Leaves**] Include all leaf branches in the analysis
+4. [**Unlabeled branches**] Set of 9 unlabeled branches
+
+>Please choose an option (or press q to cancel selection):
+
+### Branches to test for selection in the BUSTED analysis
+* Selected 9 branches to test in the BUSTED analysis: `AC133103_6_MOUSE, AC132444_5_MOUSE, NODE_3, AC132444_3_MOUSE, NODE_5, AC133103_7_MOUSE, NODE_7, AC125149_3_MOUSE, GM10553_MOUSE`
+
+
+### Obtaining branch lengths and nucleotide substitution biases under the nucleotide GTR model
+* Log(L) =  -558.17, AIC-c =  1150.61 (17 estimated parameters)
+
+### Obtaining the global omega estimate based on relative GTR branch lengths and nucleotide substitution biases
+* Log(L) =  -550.06, AIC-c =  1149.80 (24 estimated parameters)
+* non-synonymous/synonymous rate ratio for *test* =   3.7242
+
+### Improving branch lengths, nucleotide substitution biases, and global dN/dS ratios under a full codon model
+* Log(L) =  -550.00, AIC-c =  1149.68 (24 estimated parameters)
+* non-synonymous/synonymous rate ratio for *test* =   3.7493
+
+### Performing the full (dN/dS > 1 allowed) branch-site model fit
+* Log(L) =  -549.35, AIC-c =  1167.89 (33 estimated parameters)
+* For *test* branches, the following rate distribution for branch-site combinations was inferred
+
+|          Selection mode           |     dN/dS     |Proportion, %|               Notes               |
+|-----------------------------------|---------------|-------------|-----------------------------------|
+|        Negative selection         |     0.999     |    0.000    |       Not supported by data       |
+|        Negative selection         |     1.000     |    0.000    |       Not supported by data       |
+|      Diversifying selection       |     4.213     |   100.000   |                                   |
+
+
+### Performing the constrained (dN/dS > 1 not allowed) model fit
+* Log(L) =  -550.51, AIC-c =  1168.02 (32 estimated parameters)
+* For *test* branches under the null (no dN/dS > 1 model), the following rate distribution for branch-site combinations was inferred
+
+|          Selection mode           |     dN/dS     |Proportion, %|               Notes               |
+|-----------------------------------|---------------|-------------|-----------------------------------|
+|        Negative selection         |     0.980     |    0.000    |       Not supported by data       |
+|        Negative selection         |     0.980     |    0.000    |       Not supported by data       |
+|         Neutral evolution         |     1.000     |   100.000   |       Collapsed rate class        |
+
+Error:
+Syntax error  in the following context: 'tribution [_index_][1]}")<ERROR HERE>'
+
+Function call stack
+1 : busted.distribution_for_json={busted.FG:utility.Map(utility.Range(busted.rate_classes,0,1),"_index_","{terms.json.omega_ratio : busted.inferred_test_distribution [_index_][0],
+                                                           terms.json.proportion : busted.inferred_test_distribution [_index_][1],
+							   "SRV_rate" : busted.srv.inferred_test_distribution [_index_][0],
+                                                           "SRV_weight" : busted.srv.inferred_test_distribution [_index_][1]}")}
+-------
+
+Check errors.log for details on execution errors.
+
+Check messages.log details of this run.

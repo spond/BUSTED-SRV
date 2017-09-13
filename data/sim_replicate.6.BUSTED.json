@@ -1,0 +1,156 @@
+{
+ "analysis":{
+   "info":"BUSTED-SRV (branch-site unrestricted statistical test of episodic diversification with synonymous rate variation) uses a random effects branch-site model fitted jointly to all or a subset of tree branches in order to test for alignment-wide evidence of episodic diversifying selection. Assuming there is evidence of positive selection (i.e. there is an omega > 1), BUSTED will also perform a quick evidence-ratio style analysis to explore which individual sites may have been subject to selection.",
+   "version":"1.2",
+   "citation":"*Gene-wide identification of episodic selection*, Mol Biol Evol. 32(5):1365-71",
+   "authors":"Sergei L Kosakovsky Pond",
+   "contact":"spond@temple.edu",
+   "requirements":"in-frame codon alignment and a phylogenetic tree (optionally annotated with {})"
+  },
+ "input":{
+   "file name":"/home3/sadie/BUSTED-SRV/data/sim_replicate.6",
+   "number of sequences":6,
+   "number of sites":123,
+   "partition count":1,
+   "trees":{
+     "0":"((((AC133103_6_MOUSE,AC132444_5_MOUSE)NODE_3,AC132444_3_MOUSE)NODE_5,AC133103_7_MOUSE)NODE_7,AC125149_3_MOUSE,GM10553_MOUSE)"
+    }
+  },
+ "background":0,
+ "fits":{
+   "Unconstrained model":{
+     "Log Likelihood":-556.5435176186544,
+     "estimated parameters":33,
+     "AIC-c":1182.274535237309,
+     "Rate Distributions":{
+       "Test":{
+         "0":{
+           "omega":0.514082991322833,
+           "proportion":0.2091002391602146,
+           "SRV_rate":1.319316516440668e-13,
+           "SRV_weight":0.5908321196640296
+          },
+         "1":{
+           "omega":0.6022005750545921,
+           "proportion":0.7908997608397854,
+           "SRV_rate":2.004982272574713e-08,
+           "SRV_weight":0.001035718517744847
+          },
+         "2":{
+           "omega":1.110667536988475,
+           "proportion":0,
+           "SRV_rate":8.804332528808796,
+           "SRV_weight":0.4081321618182255
+          }
+        }
+      },
+     "display order":0
+    }
+  },
+ "timers":{
+   "Overall":{
+     "timer":126,
+     "order":0
+    },
+   "Preliminary model fitting":{
+     "timer":5,
+     "order":1
+    },
+   "Unconstrained BUSTED model fitting":{
+     "timer":118,
+     "order":2
+    }
+  },
+ "Site Log Likelihood":{
+   "unconstrained":[
+    [-10.27547400392412, -3.889518861403381, -3.809329946203404, -3.760680301508932, -3.889518861403381, -3.992029098905231, -4.411345434342417, -4.574239829562764, -4.277789668551415, -4.429417479930783, -4.301747388108208, -4.483929351459124, -4.067384924997861, -4.018975124674031, -3.936537508256995, -3.64110084686803, -4.035197588173492, -3.590163400550501, -4.122425803907807, -4.708031518067571, -4.240227172444282, -4.301747388108208, -3.993560081626194, -8.572799241421016, -4.456319580991098, -4.067384924997861, -4.708031518067571, -4.645352828379586, -5.038203470406661, -13.22086619128154, -3.948522611397055, -3.616872190134762, -4.294971197446456, -4.294971197446456, -3.854038204742758, -4.511121961091234, -3.64110084686803, -4.162001208580849, -4.003135766466532, -4.018975124674031, -4.429417479930783, -3.760680301508932, -10.03174884536823, -3.64110084686803, -5.013169495049881, -3.64110084686803, -4.195228340893745, -4.162001208580849, -4.023302875066431, -4.062216450790198, -4.294971197446456, -3.507652109755193, -4.109812213558654, -4.384326369306954, -4.067384924997861, -8.161069464534645, -4.645352828379586, -3.760680301508932, -4.74173736839574, -3.963189451515784, -3.616872190134762, -3.971433550661683, -8.616031016393556, -10.37614621066582, -4.411345434342417, -4.023302875066431, -3.616872190134762, -3.936537508256995, -4.294971197446456, -3.909466968167632, -4.294971197446456, -4.397331771381512, -4.018975124674031, -4.2730235263311, -4.456319580991098, -4.2730235263311, -4.511121961091234, -4.346870445491869, -4.349585805646468, -4.122425803907807, -4.483929351459124, -3.948522611397055, -3.936537508256995, -4.195228340893745, -5.099084757497685, -4.346870445491869, -4.035197588173492, -4.304737104365319, -3.889518861403381, -4.304737104365319, -3.616872190134762, -3.918632712949893, -8.446144870407982, -4.673231839052145, -4.574239829562764, -3.854038204742758, -3.963189451515784, -3.891855910472152, -3.854038204742758, -3.507652109755193, -4.574239829562764, -4.109812213558654, -3.64110084686803, -4.018975124674031, -3.891855910472152, -3.971433550661683, -3.590163400550501, -4.067384924997861, -3.891855910472152, -3.590163400550501, -9.490609668188462, -4.067384924997861, -4.003135766466532, -3.760680301508932, -3.990233979789228, -4.483929351459124, -4.240227172444282, -4.018975124674031, -4.195228340893745, -3.963189451515784, -3.963189451515784, -4.048212555764804, -3.909466968167632]
+    ]
+  },
+ "Evidence Ratios":{
+  },
+ "tested":{
+   "0":{
+     "AC133103_6_MOUSE":"test",
+     "AC132444_5_MOUSE":"test",
+     "NODE_3":"test",
+     "AC132444_3_MOUSE":"test",
+     "NODE_5":"test",
+     "AC133103_7_MOUSE":"test",
+     "NODE_7":"test",
+     "AC125149_3_MOUSE":"test",
+     "GM10553_MOUSE":"test"
+    }
+  },
+ "data partitions":{
+   "0":{
+     "name":"busted.filter.default",
+     "coverage":[
+      [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122]
+      ]
+    }
+  },
+ "branch attributes":{
+   "0":{
+     "AC125149_3_MOUSE":{
+       "MG94xREV with separate rates for test/background branches":0.005462392809469769,
+       "original name":"AC125149_3_MOUSE",
+       "unconstrained":0.01341641604292053
+      },
+     "AC132444_3_MOUSE":{
+       "MG94xREV with separate rates for test/background branches":0,
+       "original name":"AC132444_3_MOUSE",
+       "unconstrained":0
+      },
+     "AC132444_5_MOUSE":{
+       "MG94xREV with separate rates for test/background branches":0,
+       "original name":"AC132444_5_MOUSE",
+       "unconstrained":0
+      },
+     "AC133103_6_MOUSE":{
+       "MG94xREV with separate rates for test/background branches":0,
+       "original name":"AC133103_6_MOUSE",
+       "unconstrained":0
+      },
+     "AC133103_7_MOUSE":{
+       "MG94xREV with separate rates for test/background branches":0.01095509325338899,
+       "original name":"AC133103_7_MOUSE",
+       "unconstrained":0.0270361148026561
+      },
+     "GM10553_MOUSE":{
+       "MG94xREV with separate rates for test/background branches":0.01095462097552655,
+       "original name":"GM10553_MOUSE",
+       "unconstrained":0.02701724329728701
+      },
+     "NODE_3":{
+       "MG94xREV with separate rates for test/background branches":0,
+       "unconstrained":0
+      },
+     "NODE_5":{
+       "MG94xREV with separate rates for test/background branches":0,
+       "unconstrained":0
+      },
+     "NODE_7":{
+       "MG94xREV with separate rates for test/background branches":0,
+       "unconstrained":0
+      }
+    },
+   "attributes":{
+     "MG94xREV with separate rates for test/background branches":{
+       "attribute type":"branch length",
+       "display order":2
+      },
+     "original name":{
+       "attribute type":"node label",
+       "display order":0
+      },
+     "unconstrained":{
+       "attribute type":"branch length",
+       "display order":0
+      }
+    }
+  },
+ "test results":{
+   "LRT":0,
+   "p-value":1
+  }
+}
