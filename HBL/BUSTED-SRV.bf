@@ -226,12 +226,11 @@ io.ReportProgressMessageMD("BUSTED", "main", "* " + selection.io.report_fit (bus
 io.ReportProgressMessageMD("BUSTED", "main", "* For *test* branches, the following rate distribution for branch-site combinations was inferred");
 
 				     
- 
    //Prints LF
-   Export(lf_serialized, ^(busted.full_model[terms.likelihood_function]));
-   fprintf(stdout, lf_serialized, "\n");
+//   Export(lf_serialized, ^(busted.full_model[terms.likelihood_function]));
+//   fprintf(stdout, lf_serialized, "\n");
   
-   return 0;
+//   return 0;
 
 
 selection.io.stopTimer (busted.json [terms.json.timers], "Unconstrained BUSTED model fitting");
@@ -241,14 +240,15 @@ busted.srv.inferred_test_distribution = parameters.GetStickBreakingDistribution 
 
 selection.io.report_dnds (busted.inferred_test_distribution);
 
-
+//fprintf(stdout, busted.srv.inferred_test_distribution);
 
 busted.distribution_for_json = {busted.FG : utility.Map (utility.Range (busted.rate_classes, 0, 1),
                                                          "_index_",
                                                          "{terms.json.omega_ratio : busted.inferred_test_distribution [_index_][0],
                                                            terms.json.proportion : busted.inferred_test_distribution [_index_][1],
 							   busted.SRV_rate : busted.srv.inferred_test_distribution [_index_][0],
-                                                           busted.SRV_weight : busted.srv.inferred_test_distribution [_index_][1]}")};
+                                                           busted.SRV_weight : busted.srv.inferred_test_distribution [_index_][1]}")
+				};
 
 
 if (busted.has_background) {
