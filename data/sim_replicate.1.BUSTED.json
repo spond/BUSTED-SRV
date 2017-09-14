@@ -77,15 +77,15 @@
   },
  "timers":{
    "Overall":{
-     "timer":85,
+     "timer":101,
      "order":0
     },
    "Preliminary model fitting":{
-     "timer":5,
+     "timer":4,
      "order":1
     },
    "Unconstrained BUSTED model fitting":{
-     "timer":39,
+     "timer":56,
      "order":2
     },
    "Constrained BUSTED model fitting":{
