@@ -349,7 +349,7 @@ console.log ( "Likelihood ratio test for episodic diversifying positive selectio
 
 selection.io.stopTimer (busted.json [terms.json.timers], "Overall");
 
-
+fprintf(stdout, busted.codon_data_info [terms.json.json]);
 
 io.SpoolJSON (busted.json, busted.codon_data_info [terms.json.json]);
 
