@@ -1,5 +1,12 @@
 ####Newly formatted .jsons
 
+#will not work if BUSTED and BUSTED+SRV jsons are in the same folder
+
+#TODO
+#test on BUSTED json
+
+
+
 library(jsonlite)
 
 library(stringr)
@@ -80,9 +87,9 @@ compile <- function(cur.dir,csv){
     
   }
   
-  #write.csv(file = csv, x = df, row.names= F)
+  write.csv(file = csv, x = df, row.names= F)
   
-  return(as.data.frame(df,stringAsFactors = FALSE))
+  #return(as.data.frame(df,stringAsFactors = FALSE))
 }
 
 #can't mix and match rate categories yet
@@ -135,6 +142,8 @@ simulation_inputs <- function(dir,csv){
   write.csv(file = csv, x = setup.tab, row.names= F)
 }
 
+
+
 add_truth <- function(results, truth){
   
   n <- truth %>% select(-FILE, -Sites) %>% colnames()
@@ -165,6 +174,6 @@ process_dat <- function(dir, basename){
 
 
 
-dir= "final_results/1000_Codons/"
-basename = "All_5_8_17"
-all.dat = process_dat(dir, basename)
+dir= cur.dir
+basename = "test"
+process_dat(dir, basename)
