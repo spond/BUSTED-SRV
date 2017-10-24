@@ -4,9 +4,11 @@ LoadFunctionLibrary ("GrabBag");
 SetDialogPrompt ("Load a BUSTED likelihood function fit (BUSTED.lf.bf) extension:");
 ExecuteAFile (PROMPT_FOR_FILE);
 
+
 fit_info = report_loaded_fit  ();
 
-Export (lfstring, ShLsBBNm.likelihoodFunction);
+
+Export (lfstring, ^(lfname));
 fprintf("/home3/sadie/BUSTED-SRV/data/LF1.txt", lfstring);
 
 
@@ -17,7 +19,7 @@ prompt_for_omegas (fit_info["omega rate count"]);
 
 sim_info = report_loaded_fit();
 
-Export (lfstring, ShLsBBNm.likelihoodFunction);
+Export (lfstring,^(lfname));
 fprintf("/home3/sadie/BUSTED-SRV/data/LF2.txt", lfstring);
 
 fprintf (stdout, "\n\nUsing this information for the simulations\n\n", sim_info, "\n\n");
@@ -32,7 +34,7 @@ DATA_FILE_PRINT_FORMAT = 9; // FASTA
 
 for (repl = 1; repl < replicates; repl += 1) {
     fprintf (stdout, "Simulating replicate ", repl, " / ", replicates, "\n");
-    DataSet simfile = SimulateDataSet (ShLsBBNm.likelihoodFunction );
+    DataSet simfile = SimulateDataSet (^(lfname));
     DataSetFilter simnucs = CreateFilter (simfile, 1);
     fprintf (sim_path + "_replicate." + repl, CLEAR_FILE, simnucs);
 }
@@ -40,7 +42,8 @@ for (repl = 1; repl < replicates; repl += 1) {
 function report_loaded_fit () {
     GetInformation (omega.weights, "^busted.test.bsrel_mixture_aux_[0-9]+$");
     GetInformation (srv.weights,   "^busted.test.rv_gdd_weights_[0-9]+$");
-    
+    GetString (lfname, LikelihoodFunction,0);
+    //fprintf (stdout, lfname, " lf ");    
     
     omega.rates = Columns (omega.weights) + 1;
     srv.rates   = Columns (srv.weights) + 1;
