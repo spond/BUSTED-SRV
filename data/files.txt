@@ -1,9 +1,5 @@
-/home3/sadie/BUSTED-SRV/data/sim_replicate.1
-/home3/sadie/BUSTED-SRV/data/sim_replicate.2
-/home3/sadie/BUSTED-SRV/data/sim_replicate.3
-/home3/sadie/BUSTED-SRV/data/sim_replicate.4
-/home3/sadie/BUSTED-SRV/data/sim_replicate.5
-/home3/sadie/BUSTED-SRV/data/sim_replicate.6
-/home3/sadie/BUSTED-SRV/data/sim_replicate.7
-/home3/sadie/BUSTED-SRV/data/sim_replicate.8
-/home3/sadie/BUSTED-SRV/data/sim_replicate.9
+/home3/sadie/BUSTED-SRV/data/sim-10-24-17
+/home3/sadie/BUSTED-SRV/data/sim-10-24-17_replicate.1
+/home3/sadie/BUSTED-SRV/data/sim-10-24-17_replicate.2
+/home3/sadie/BUSTED-SRV/data/sim-10-24-17_replicate.3
+/home3/sadie/BUSTED-SRV/data/sim-10-24-17_replicate.4

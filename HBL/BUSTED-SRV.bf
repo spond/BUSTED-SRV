@@ -59,7 +59,7 @@ selection.io.startTimer (busted.json [terms.json.timers], "Overall", 0);
 
 namespace busted {
     LoadFunctionLibrary ("SelectionAnalyses/modules/shared-load-file.bf");
-    load_file ("busted");
+    load_file ("busted_srv");
 }
 
 
