@@ -227,11 +227,11 @@ io.ReportProgressMessageMD("BUSTED", "main", "* For *test* branches, the followi
 
 				     
    //Prints LF
-     Export(lf_serialized, ^(busted.full_model[terms.likelihood_function]));
+   /*  Export(lf_serialized, ^(busted.full_model[terms.likelihood_function]));
      fprintf(stdout, lf_serialized, "\n");
   
      return 0;
-
+*/
 
 selection.io.stopTimer (busted.json [terms.json.timers], "Unconstrained BUSTED model fitting");
 
