@@ -20,7 +20,7 @@ filepath <- "data/sim_replicate.6.BUSTED.json"
 #right now we have equal syn and nonsyn rates
 #maybe I can put the number of rate cats in the JSON?
 
-cur.dir = "C:/Users/srwisots/Desktop/tmp/BUSTED-SRV/data/new_data/"
+cur.dir = "~/temp/BUSTED-SRV/data/data_10_24/"
 
 compile <- function(cur.dir,csv){
   jsons <- list.files(path = cur.dir,
@@ -31,9 +31,11 @@ compile <- function(cur.dir,csv){
   #create a table with 78 variables to fill 
   #step thru list of json files and read info from them
   #increments of two because want one line for each rep that includes BUSTED and BUSTED-SRV info
-  for (i in  seq(from=1, to=length(jsons), by=1)){
+  for (i in  seq(from=1, to=length(jsons), by=2)){
     filepath = paste(cur.dir,jsons[i], sep="") #file path of the current json
     
+    if (grepl("SRV.json",jsons[i+1])){
+      filepath = paste(cur.dir,jsons[i+1], sep="")
     test = filepath %>% readLines() %>% gsub(x=.,pattern="nan",replacement ='"NA"') %>% fromJSON() #read the JSON in
     #have to account for weird behavior caused by nan vs NA 
     
@@ -65,24 +67,59 @@ compile <- function(cur.dir,csv){
     srv.omega.props <- temp %>% select(contains("prop"))
     srv.alpha.rates <- temp %>% select(contains("SRV_rate"))
     srv.alpha.props <- temp %>% select(contains("weight"))
-    
+    names(srv.omega.rates) <- paste0(names(srv.omega.rates), "_srv")
+    names(srv.omega.props) <- paste0(names(srv.omega.props),"_srv")
   
     mom2 = sum(srv.alpha.rates^2*srv.alpha.props)
     mean= sum(srv.alpha.rates*srv.alpha.props)
     CV.SRV = sqrt(mom2-mean^2)/mean
     
 
+    }
     
-    
-    
+    if (grepl("BUSTED.json",jsons[i])){
+      filepath = paste(cur.dir,jsons[i], sep="")
+      test = filepath %>% readLines() %>% gsub(x=.,pattern="nan",replacement ='"NA"') %>% fromJSON() #read the JSON in
+      #have to account for weird behavior caused by nan vs NA 
+      
+      FILE = test$input$`file name` #get name of file (useful for matching later)
+      Sites = test$input$`number of sites` #get number of nucleotide sites
+      
+      tree_string = test$input$trees$`0` # get tree string
+      
+      
+      Sequences = test$input$`number of sequences` #number of non Node named branch is the numb of seqs started with
+      
+      
+      
+      BUSTED.P = test$`test results`$`p-value`
+      BUSTED.LR =test$`test results`$LRT
+      BUSTED.AICc = test$fits$`Unconstrained model`$`AIC-c`
+      
+      #TO-DO: GET TREE LENGTH
+      
+      #BUSTED.SRV.treelength = test$fits$`Unconstrained model`$`tree length`
+      
+      
+      #get rates and weights
+      temp <- test$fits$`Unconstrained model`$`Rate Distributions`$Test
+      temp <- temp %>% unlist() %>% t() %>% as.data.frame() #turn into data.frame for easier manip
+      
+      
+      busted.omega.rates <- temp %>% select(contains("omega"))
+      busted.omega.props <- temp %>% select(contains("prop"))
+      
+      
+      
+    }
     
     #print(FILE)
     x<- c(FILE,  BUSTED.SRV.LR, CV.SRV,  BUSTED.SRV.P, BUSTED.SRV.AICc,
-           Sites, Sequences)
+           Sites, Sequences, BUSTED.LR, BUSTED.P, BUSTED.AICc)
     x[2:length(x)] <- as.numeric(x[2:length(x)])
     names(x) <- c("FILE", "BUSTED.SRV.LR","CV.SRV", "BUSTED.SRV.P", "BUSTED.SRV.AICc",
-                   "Sites","Sequences")
-    df <-rbind(df, c(x, srv.omega.rates, srv.omega.props,srv.alpha.rates,srv.alpha.props))
+                   "Sites","Sequences","BUSTED.LR","BUSTED.P","BUSTED.AICc")
+    df <-rbind(df, c(x, srv.omega.rates, srv.omega.props,srv.alpha.rates,srv.alpha.props,busted.omega.rates,busted.omega.props))
     
     
   }
@@ -108,11 +145,15 @@ simulation_inputs <- function(dir,csv){
     
     x1 = x[2:(length(x)-1)]  %>% gsub(x=.,pattern="\\{",replacement ='\\[') %>% gsub(x=.,pattern ="\\}", replacement ="\\]")
     x1 = c(x[1],x1,x[length(x)])
-    num_rates=as.numeric(str_extract(x1[4], "[0-9]+"))
+    num_rates <- sapply(x1, function (x) str_detect(x,"rate count")) %>% which(.==TRUE) %>% names(.) %>%
+      str_extract(.,"[0-9]+") %>% as.numeric()
     
-    end_1 = 6+(num_rates-2)
+    
+    
+    
+    end_1 = 6+(num_rates[1]-2)
     start_2 = end_1+5
-    end_2 = start_2+num_rates-2
+    end_2 = start_2+num_rates[2]-2
     x1[c(6:end_1,start_2:end_2)]  = x1[c(6:end_1,start_2:end_2)] %>%  gsub(x=.,pattern ="\\]", replacement ="\\],")
     
     r= fromJSON(x1)
