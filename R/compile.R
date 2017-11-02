@@ -46,8 +46,11 @@ compile <- function(dir,csv){
       BUSTED.SRV.AICc = test$fits$`Unconstrained model`$`AIC-c`
       
       #TO-DO: GET TREE LENGTH
+      temp <- test$`branch attributes`$`0`
+      temp <- temp %>% unlist() %>% t() %>% as.data.frame()
       
-      #BUSTED.SRV.treelength = test$fits$`Unconstrained model`$`tree length`
+      unconstrained.bls <- temp %>% select(contains("uncon"))
+      BUSTED.SRV.treelength <- unconstrained.bls %>% t() %>%   as.numeric() %>% sum()
       
       
       #get rates and weights
@@ -92,6 +95,12 @@ compile <- function(dir,csv){
       BUSTED.AICc = test$fits$`Unconstrained model`$`AIC-c`
       
       #TO-DO: GET TREE LENGTH
+      temp <- test$`branch attributes`$`0`
+      temp <- temp %>% unlist() %>% t() %>% as.data.frame()
+      
+      unconstrained.bls <- temp %>% select(contains("uncon"))
+      BUSTED.treelength <- unconstrained.bls %>% t() %>%   as.numeric() %>% sum()
+      
       
       #BUSTED.SRV.treelength = test$fits$`Unconstrained model`$`tree length`
       
@@ -112,10 +121,10 @@ compile <- function(dir,csv){
     
     #print(FILE)
     x<- c(FILE,  BUSTED.SRV.LR, CV.SRV,  BUSTED.SRV.P, BUSTED.SRV.AICc,
-          Sites, Sequences, BUSTED.LR, BUSTED.P, BUSTED.AICc)
+          Sites, Sequences, BUSTED.LR, BUSTED.P, BUSTED.AICc, BUSTED.SRV.treelength, BUSTED.treelength)
     x[2:length(x)] <- as.numeric(x[2:length(x)])
     names(x) <- c("FILE", "BUSTED.SRV.LR","CV.SRV", "BUSTED.SRV.P", "BUSTED.SRV.AICc",
-                  "Sites","Sequences","BUSTED.LR","BUSTED.P","BUSTED.AICc")
+                  "Sites","Sequences","BUSTED.LR","BUSTED.P","BUSTED.AICc", "BUSTED.SRV.treelength", "BUSTED.treelength")
     df <-rbind(df, c(x, srv.omega.rates, srv.omega.props,srv.alpha.rates,srv.alpha.props,busted.omega.rates,busted.omega.props))
     
     
