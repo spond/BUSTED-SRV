@@ -1,11 +1,5 @@
 ####Newly formatted .jsons
 
-#will not work if BUSTED and BUSTED+SRV jsons are in the same folder
-
-#TODO
-#test on BUSTED json
-
-
 
 library(jsonlite)
 
@@ -13,17 +7,13 @@ library(stringr)
 
 library(dplyr)
 
-test <-fromJSON("data/sim_replicate.6.BUSTED.json")
 
-filepath <- "data/sim_replicate.6.BUSTED.json"
 
-#right now we have equal syn and nonsyn rates
-#maybe I can put the number of rate cats in the JSON?
 
-cur.dir = "~/temp/BUSTED-SRV/data/data_10_24/"
 
-compile <- function(cur.dir,csv){
-  jsons <- list.files(path = cur.dir,
+
+compile <- function(dir,csv){
+  jsons <- list.files(path = dir,
                       pattern = '*.json', recursive = TRUE) # list all of the json files in a given directory and the subdirectories in it
   
   
@@ -32,53 +22,53 @@ compile <- function(cur.dir,csv){
   #step thru list of json files and read info from them
   #increments of two because want one line for each rep that includes BUSTED and BUSTED-SRV info
   for (i in  seq(from=1, to=length(jsons), by=2)){
-    filepath = paste(cur.dir,jsons[i], sep="") #file path of the current json
+    filepath = paste(dir,jsons[i], sep="") #file path of the current json
     
     if (grepl("SRV.json",jsons[i+1])){
-      filepath = paste(cur.dir,jsons[i+1], sep="")
-    test = filepath %>% readLines() %>% gsub(x=.,pattern="nan",replacement ='"NA"') %>% fromJSON() #read the JSON in
-    #have to account for weird behavior caused by nan vs NA 
-    
-    FILE = test$input$`file name` #get name of file (useful for matching later)
-    Sites = test$input$`number of sites` #get number of nucleotide sites
-    
-    tree_string = test$input$trees$`0` # get tree string
-
-    
-    Sequences = test$input$`number of sequences` #number of non Node named branch is the numb of seqs started with
-    
-
-    
-    BUSTED.SRV.P = test$`test results`$`p-value`
-    BUSTED.SRV.LR =test$`test results`$LRT
-    BUSTED.SRV.AICc = test$fits$`Unconstrained model`$`AIC-c`
-    
-    #TO-DO: GET TREE LENGTH
-    
-    #BUSTED.SRV.treelength = test$fits$`Unconstrained model`$`tree length`
-    
-    
-    #get rates and weights
-    temp <- test$fits$`Unconstrained model`$`Rate Distributions`$Test
-    temp <- temp %>% unlist() %>% t() %>% as.data.frame() #turn into data.frame for easier manip
-    
-    
-    srv.omega.rates <- temp %>% select(contains("omega"))
-    srv.omega.props <- temp %>% select(contains("prop"))
-    srv.alpha.rates <- temp %>% select(contains("SRV_rate"))
-    srv.alpha.props <- temp %>% select(contains("weight"))
-    names(srv.omega.rates) <- paste0(names(srv.omega.rates), "_srv")
-    names(srv.omega.props) <- paste0(names(srv.omega.props),"_srv")
-  
-    mom2 = sum(srv.alpha.rates^2*srv.alpha.props)
-    mean= sum(srv.alpha.rates*srv.alpha.props)
-    CV.SRV = sqrt(mom2-mean^2)/mean
-    
-
+      filepath = paste(dir,jsons[i+1], sep="")
+      test = filepath %>% readLines() %>% gsub(x=.,pattern="nan",replacement ='"NA"') %>% fromJSON() #read the JSON in
+      #have to account for weird behavior caused by nan vs NA 
+      
+      FILE = test$input$`file name` #get name of file (useful for matching later)
+      Sites = test$input$`number of sites` #get number of nucleotide sites
+      
+      tree_string = test$input$trees$`0` # get tree string
+      
+      
+      Sequences = test$input$`number of sequences` #number of non Node named branch is the numb of seqs started with
+      
+      
+      
+      BUSTED.SRV.P = test$`test results`$`p-value`
+      BUSTED.SRV.LR =test$`test results`$LRT
+      BUSTED.SRV.AICc = test$fits$`Unconstrained model`$`AIC-c`
+      
+      #TO-DO: GET TREE LENGTH
+      
+      #BUSTED.SRV.treelength = test$fits$`Unconstrained model`$`tree length`
+      
+      
+      #get rates and weights
+      temp <- test$fits$`Unconstrained model`$`Rate Distributions`$Test
+      temp <- temp %>% unlist() %>% t() %>% as.data.frame() #turn into data.frame for easier manip
+      
+      
+      srv.omega.rates <- temp %>% select(contains("omega"))
+      srv.omega.props <- temp %>% select(contains("prop"))
+      srv.alpha.rates <- temp %>% select(contains("SRV_rate"))
+      srv.alpha.props <- temp %>% select(contains("weight"))
+      names(srv.omega.rates) <- paste0(names(srv.omega.rates), "_srv")
+      names(srv.omega.props) <- paste0(names(srv.omega.props),"_srv")
+      
+      mom2 = sum(srv.alpha.rates^2*srv.alpha.props)
+      mean= sum(srv.alpha.rates*srv.alpha.props)
+      CV.SRV = sqrt(mom2-mean^2)/mean
+      
+      
     }
     
     if (grepl("BUSTED.json",jsons[i])){
-      filepath = paste(cur.dir,jsons[i], sep="")
+      filepath = paste(dir,jsons[i], sep="")
       test = filepath %>% readLines() %>% gsub(x=.,pattern="nan",replacement ='"NA"') %>% fromJSON() #read the JSON in
       #have to account for weird behavior caused by nan vs NA 
       
@@ -115,10 +105,10 @@ compile <- function(cur.dir,csv){
     
     #print(FILE)
     x<- c(FILE,  BUSTED.SRV.LR, CV.SRV,  BUSTED.SRV.P, BUSTED.SRV.AICc,
-           Sites, Sequences, BUSTED.LR, BUSTED.P, BUSTED.AICc)
+          Sites, Sequences, BUSTED.LR, BUSTED.P, BUSTED.AICc)
     x[2:length(x)] <- as.numeric(x[2:length(x)])
     names(x) <- c("FILE", "BUSTED.SRV.LR","CV.SRV", "BUSTED.SRV.P", "BUSTED.SRV.AICc",
-                   "Sites","Sequences","BUSTED.LR","BUSTED.P","BUSTED.AICc")
+                  "Sites","Sequences","BUSTED.LR","BUSTED.P","BUSTED.AICc")
     df <-rbind(df, c(x, srv.omega.rates, srv.omega.props,srv.alpha.rates,srv.alpha.props,busted.omega.rates,busted.omega.props))
     
     
@@ -215,6 +205,3 @@ process_dat <- function(dir, basename){
 
 
 
-dir= cur.dir
-basename = "test"
-process_dat(dir, basename)
