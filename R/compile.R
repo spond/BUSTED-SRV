@@ -13,6 +13,8 @@ library(dplyr)
 
 
 compile <- function(dir,csv){
+  #function reads BUSTED.JSONs and BUSTED_SRV.JSONS into a *.csv format
+  #the csv can then be more easily used in R 
   jsons <- list.files(path = dir,
                       pattern = '*.json', recursive = TRUE) # list all of the json files in a given directory and the subdirectories in it
   
@@ -57,8 +59,11 @@ compile <- function(dir,csv){
       srv.omega.props <- temp %>% select(contains("prop"))
       srv.alpha.rates <- temp %>% select(contains("SRV_rate"))
       srv.alpha.props <- temp %>% select(contains("weight"))
-      names(srv.omega.rates) <- paste0(names(srv.omega.rates), "_srv")
-      names(srv.omega.props) <- paste0(names(srv.omega.props),"_srv")
+      names(srv.omega.rates) <- paste("srv.omega.rate",seq(1,length(srv.omega.rates)), sep = ".")
+      names(srv.omega.props) <- paste("srv.omega.prop",seq(1,length(srv.omega.props)), sep = ".")
+      names(srv.alpha.rates) <- paste("srv.alpha.rate",seq(1,length(srv.alpha.rates)), sep = ".")
+      names(srv.alpha.props) <- paste("srv.alpha.prop",seq(1,length(srv.alpha.props)), sep = ".")
+      
       
       mom2 = sum(srv.alpha.rates^2*srv.alpha.props)
       mean= sum(srv.alpha.rates*srv.alpha.props)
@@ -98,6 +103,8 @@ compile <- function(dir,csv){
       
       busted.omega.rates <- temp %>% select(contains("omega"))
       busted.omega.props <- temp %>% select(contains("prop"))
+      names(busted.omega.rates) <- paste("omega.rate",seq(1,length(busted.omega.rates)), sep = ".")
+      names(busted.omega.props) <- paste("omega.prop",seq(1,length(busted.omega.props)), sep = ".")
       
       
       
