@@ -112,8 +112,8 @@ compile <- function(dir,csv){
       
       busted.omega.rates <- temp %>% select(contains("omega"))
       busted.omega.props <- temp %>% select(contains("prop"))
-      names(busted.omega.rates) <- paste("omega.rate",seq(1,length(busted.omega.rates)), sep = ".")
-      names(busted.omega.props) <- paste("omega.prop",seq(1,length(busted.omega.props)), sep = ".")
+      names(busted.omega.rates) <- paste("busted.omega.rate",seq(1,length(busted.omega.rates)), sep = ".")
+      names(busted.omega.props) <- paste("busted.omega.prop",seq(1,length(busted.omega.props)), sep = ".")
       
       
       
