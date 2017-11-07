@@ -11,24 +11,23 @@ library(dplyr)
 
 
 
-
 compile <- function(dir,csv){
   #function reads BUSTED.JSONs and BUSTED_SRV.JSONS into a *.csv format
   #the csv can then be more easily used in R 
-  jsons <- list.files(path = dir,
-                      pattern = '*.json', recursive = TRUE) # list all of the json files in a given directory and the subdirectories in it
+  srv.jsons <- list.files(path = dir,
+                      pattern = '*BUSTED_SRV.json', recursive = TRUE) # list all of the json files in a given directory and the subdirectories in it
+  busted.jsons <- list.files(path = dir,
+                          pattern = '*BUSTED.json', recursive = TRUE)
   
-  
-  df<- NULL
+  df.SRV<- NULL
+  df.BUSTED <- NULL
   #create a table with 78 variables to fill 
   #step thru list of json files and read info from them
   #increments of two because want one line for each rep that includes BUSTED and BUSTED-SRV info
-  for (i in  seq(from=1, to=length(jsons), by=2)){
-    filepath = paste(dir,jsons[i], sep="") #file path of the current json
+  for (i in  seq(from=1, to=length(srv.jsons), by=1)){
+    filepath = paste(dir,srv.jsons[i], sep="") #file path of the current json
     
-    if (grepl("SRV.json",jsons[i+1])){
-      filepath = paste(dir,jsons[i+1], sep="")
-      test = filepath %>% readLines() %>% gsub(x=.,pattern="nan",replacement ='"NA"') %>% fromJSON() #read the JSON in
+   test = filepath %>% readLines() %>% gsub(x=.,pattern="nan",replacement ='"NA"') %>% fromJSON() #read the JSON in
       #have to account for weird behavior caused by nan vs NA 
       
       FILE = test$input$`file name` #get name of file (useful for matching later)
@@ -73,10 +72,17 @@ compile <- function(dir,csv){
       CV.SRV = sqrt(mom2-mean^2)/mean
       
       
-    }
-    
-    if (grepl("BUSTED.json",jsons[i])){
-      filepath = paste(dir,jsons[i], sep="")
+   
+    x<- c(FILE,Sites, Sequences,  BUSTED.SRV.LR, CV.SRV,  BUSTED.SRV.P, BUSTED.SRV.AICc,
+            BUSTED.SRV.treelength)
+    x[2:length(x)] <- as.numeric(x[2:length(x)])
+    names.SRV <- c("FILE", "Sites","Sequences","BUSTED.SRV.LR","CV.SRV", "BUSTED.SRV.P", "BUSTED.SRV.AICc",
+                   "BUSTED.SRV.treelength")
+    df.SRV <-rbind(df.SRV, c(x, srv.omega.rates, srv.omega.props,srv.alpha.rates,srv.alpha.props))
+  }   
+  for (i in  seq(from=1, to=length(busted.jsons), by=1)){ 
+    if (grepl("BUSTED.json",busted.jsons[i])){
+      filepath = paste(dir,busted.jsons[i], sep="")
       test = filepath %>% readLines() %>% gsub(x=.,pattern="nan",replacement ='"NA"') %>% fromJSON() #read the JSON in
       #have to account for weird behavior caused by nan vs NA 
       
@@ -120,16 +126,18 @@ compile <- function(dir,csv){
     }
     
     #print(FILE)
-    x<- c(FILE,  BUSTED.SRV.LR, CV.SRV,  BUSTED.SRV.P, BUSTED.SRV.AICc,
-          Sites, Sequences, BUSTED.LR, BUSTED.P, BUSTED.AICc, BUSTED.SRV.treelength, BUSTED.treelength)
+    x<- c(FILE, Sites, Sequences, BUSTED.LR, BUSTED.P, BUSTED.AICc,BUSTED.treelength)
     x[2:length(x)] <- as.numeric(x[2:length(x)])
-    names(x) <- c("FILE", "BUSTED.SRV.LR","CV.SRV", "BUSTED.SRV.P", "BUSTED.SRV.AICc",
-                  "Sites","Sequences","BUSTED.LR","BUSTED.P","BUSTED.AICc", "BUSTED.SRV.treelength", "BUSTED.treelength")
-    df <-rbind(df, c(x, srv.omega.rates, srv.omega.props,srv.alpha.rates,srv.alpha.props,busted.omega.rates,busted.omega.props))
+    names.BUSTED <- c("FILE","Sites","Sequences","BUSTED.LR","BUSTED.P","BUSTED.AICc", "BUSTED.treelength")
+    df.BUSTED <-rbind(df.BUSTED, c(x, busted.omega.rates,busted.omega.props))
     
     
   }
-  
+  df.BUSTED <- as.data.frame(matrix(unlist(df.BUSTED), nrow=nrow(df.BUSTED)))
+  names(df.BUSTED) <- names.BUSTED
+  df.SRV <- as.data.frame(matrix(unlist(df.SRV), nrow=nrow(df.SRV)))
+  names(df.SRV) <- names.SRV
+  temp <- full_join(df.BUSTED,df.SRV,by=c("FILE","Sites","Sequences"))
   write.csv(file = csv, x = df, row.names= F)
   
   #return(as.data.frame(df,stringAsFactors = FALSE))
