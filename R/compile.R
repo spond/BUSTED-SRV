@@ -44,7 +44,7 @@ compile <- function(dir,csv){
       BUSTED.SRV.LR =test$`test results`$LRT
       BUSTED.SRV.AICc = test$fits$`Unconstrained model`$`AIC-c`
       
-      #TO-DO: GET TREE LENGTH
+      
       temp <- test$`branch attributes`$`0`
       temp <- temp %>% unlist() %>% t() %>% as.data.frame()
       
