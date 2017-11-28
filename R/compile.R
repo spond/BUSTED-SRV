@@ -63,8 +63,8 @@ compile <- function(dir,csv){
       srv.alpha.props <- temp %>% select(contains("weight"))
       names(srv.omega.rates) <- paste("srv.omega",seq(1,length(srv.omega.rates)), "rate", sep = ".")
       names(srv.omega.props) <- paste("srv.omega",seq(1,length(srv.omega.props)), "prop", sep = ".")
-      names(srv.alpha.rates) <- paste("srv.alpha",seq(1,length(srv.alpha.rates)), "rate"sep = ".")
-      names(srv.alpha.props) <- paste("srv.alpha",seq(1,length(srv.alpha.props)), "prop",sep = ".")
+      names(srv.alpha.rates) <- paste("srv.alpha",seq(1,length(srv.alpha.rates)), "rate", sep = ".")
+      names(srv.alpha.props) <- paste("srv.alpha",seq(1,length(srv.alpha.props)), "prop", sep = ".")
       
       
       mom2 = sum(srv.alpha.rates^2*srv.alpha.props)
