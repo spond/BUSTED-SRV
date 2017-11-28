@@ -172,14 +172,14 @@ simulation_inputs <- function(dir,csv){
     
     r= fromJSON(x1)
     omega_rates = r$`omega distribution`[,1]
-    names(omega_rates)= paste0("True.omega",seq(from=1, to = r$`omega rate count`, by =1), ".value" )
+    names(omega_rates)= paste0("True.omega.",seq(from=1, to = r$`omega rate count`, by =1), ".value" )
     omega_weights = r$`omega distribution`[,2]
-    names(omega_weights) = paste0("Ture.omega",seq(from=1, to = r$`omega rate count`, by =1), ".prop" )
+    names(omega_weights) = paste0("True.omega.",seq(from=1, to = r$`omega rate count`, by =1), ".prop" )
     
     Alpha_rates = r$`alpha distribution`[,1]
-    names(Alpha_rates)= paste0("True.alpha",seq(from=1, to = r$`alpha rate count`, by =1), ".value" )
+    names(Alpha_rates)= paste0("True.alpha.",seq(from=1, to = r$`alpha rate count`, by =1), ".value" )
     Alpha_weights = r$`alpha distribution`[,2]
-    names(Alpha_weights) = paste0("True.alpha",seq(from=1, to = r$`alpha rate count`, by =1), ".prop" )
+    names(Alpha_weights) = paste0("True.alpha.",seq(from=1, to = r$`alpha rate count`, by =1), ".prop" )
     
     mom2 = sum(Alpha_rates^2*Alpha_weights)
     
