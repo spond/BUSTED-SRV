@@ -1,0 +1,92 @@
+---
+title: "Parameters_median_sim"
+author: "Sadie Wisotsky"
+date: "December 4, 2017"
+output: html_document
+---
+
+Red i Tue CV of SRV value
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+source("./R/useful_functions_sim_analysis.R")
+source("C:/Users/srwisots/Google Drive/Muse/BRC/Results Processing/R_scripts/useful_functions.R")
+
+
+library(readr)
+library(ggplot2)
+library(dplyr)
+
+dat <- read_csv("~/temp/BUSTED-SRV/len_Sim_12_12_17_processed.csv")
+
+dat <- dat %>% group_by(True.CV,True.omega.3.value)
+
+true.CV.lines <- dat %>% select(True.CV) %>% unique()
+
+dat %>% ggplot(aes(CV.SRV, fill = Sites))+geom_histogram(bins = 50)+ geom_vline(data =true.CV.lines, aes(xintercept = True.CV), color ='red') +
+  facet_grid(True.CV~Sites, scales = "free") 
+```
+RED = BUSTED
+BLUE = BUSTED+SRV
+vertical lines are true values (values I set for the simulation)
+
+```{r}
+dat %>% ggplot()+geom_histogram(aes(busted.omega.3.rate), fill = 'red', alpha = 0.5)+
+  geom_histogram(aes(srv.omega.3.rate), fill = 'blue', alpha = 0.5) + geom_vline(aes(xintercept = mean(dat$True.omega.3.value))) +
+  xlim(0, 25) + facet_grid(~Sites)
+
+```
+
+```{r}
+dat %>% ggplot()+geom_histogram(aes(busted.omega.1.rate), fill = 'red', alpha = 0.5)+
+  geom_histogram(aes(srv.omega.1.rate), fill = 'blue', alpha = 0.5) + geom_vline(aes(xintercept = mean(dat$True.omega.1.value))) + facet_grid(~Sites, scales = "free") 
+```
+
+```{r}
+dat %>% ggplot()+geom_histogram(aes(busted.omega.2.rate), fill = 'red', alpha = 0.5)+
+  geom_histogram(aes(srv.omega.2.rate), fill = 'blue', alpha = 0.5) + geom_vline(aes(xintercept = mean(dat$True.omega.2.value))) + facet_grid(~Sites, scales = "free") 
+```
+
+```{r}
+dat %>% ggplot()+geom_histogram(aes(busted.omega.2.rate), fill = 'red', alpha = 0.5)+
+  geom_histogram(aes(srv.omega.2.rate), fill = 'blue', alpha = 0.5) + geom_vline(aes(xintercept = mean(dat$True.omega.2.value)))+ facet_grid(~Sites, scales = "free") 
+```
+
+
+```{r}
+dat %>% ggplot() + geom_histogram(aes(BUSTED.treelength), fill = 'red', alpha = 0.5) +
+  geom_histogram(aes(BUSTED.SRV.treelength), fill = 'blue', alpha = 0.5) +xlab("Tree Length")+ facet_grid(~Sites, scales = "free") 
+```
+
+
+```{r}
+dat %>% ggplot()+ geom_histogram(aes(srv.alpha.1.rate), fill = 'blue', alpha = 0.5) + geom_vline(aes(xintercept = mean(dat$True.alpha.1.value)))+ facet_grid(~Sites, scales = "free") 
+
+dat %>% ggplot()+ geom_histogram(aes(srv.alpha.1.prop), fill = 'blue', alpha = 0.5) + geom_vline(aes(xintercept = mean(dat$True.alpha.1.prop)))+ facet_grid(~Sites, scales = "free") 
+
+```
+```{r}
+dat %>% ggplot()+ geom_histogram(aes(srv.alpha.2.rate), fill = 'blue', alpha = 0.5) + geom_vline(aes(xintercept = mean(dat$True.alpha.2.value)))+ facet_grid(~Sites, scales = "free") 
+
+dat %>% ggplot()+ geom_histogram(aes(srv.alpha.2.prop), fill = 'blue', alpha = 0.5) + geom_vline(aes(xintercept = mean(dat$True.alpha.2.prop)))+ facet_grid(~Sites, scales = "free") 
+
+
+```
+
+```{r}
+dat %>% ggplot()+ geom_histogram(aes(srv.alpha.3.rate), fill = 'blue', alpha = 0.5) + geom_vline(aes(xintercept = mean(dat$True.alpha.3.value)))+ facet_grid(~Sites, scales = "free") 
+
+dat %>% ggplot()+ geom_histogram(aes(srv.alpha.3.prop), fill = 'blue', alpha = 0.5) + geom_vline(aes(xintercept = mean(dat$True.alpha.3.prop)))+ facet_grid(~Sites, scales = "free") 
+
+```
+
+```{r}
+
+
+dat.w <- dat
+
+sites.factor <- factor(dat$Sites)
+by(dat.w, sites.factor, function(x){ gen.sig.table(dat = x) }, simplify = T)
+
+
+
+```
+
