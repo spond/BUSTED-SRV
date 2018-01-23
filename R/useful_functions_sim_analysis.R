@@ -14,27 +14,27 @@ pwr_tab <- function(dat) {
   
   
   A1.dat = dat
-  A1.basic = A1.dat %>% group_by(True.omega.3.value, True.CV) %>% summarise(num_reps = n())
+  A1.basic = A1.dat %>% group_by(True.omega.3.value, True.CV, Sites) %>% summarise(num_reps = n())
   
-  A1.BUSTED = A1.dat %>% group_by(True.omega.3.value,True.CV) %>% filter(BUSTED.P <
+  A1.BUSTED = A1.dat %>% group_by(True.omega.3.value,True.CV, Sites) %>% filter(BUSTED.P <
                                                                                0.05) %>% tally()
   A1.BUSTED = rename(A1.BUSTED, "BUSTED_PWR" = n)
   
-  A1.SRV = A1.dat %>%  group_by(True.omega.3.value, True.CV) %>% filter(BUSTED.SRV.P <
+  A1.SRV = A1.dat %>%  group_by(True.omega.3.value, True.CV, Sites) %>% filter(BUSTED.SRV.P <
                                                                               0.05) %>%  tally()
   A1.SRV = rename(A1.SRV, "SRV_PWR" = n)
   
-  A1.pwr.tab = full_join(A1.BUSTED, A1.SRV, by = c("True.omega.3.value", "True.CV")) %>% 
-    full_join(., A1.basic, by = c("True.omega.3.value", "True.CV"))
+  A1.pwr.tab = full_join(A1.BUSTED, A1.SRV, by = c("True.omega.3.value", "True.CV", "Sites")) %>% 
+    full_join(., A1.basic, by = c("True.omega.3.value", "True.CV", "Sites"))
   
   
   
-  A1.means = A1.dat %>% group_by(True.omega.3.value, True.CV) %>%   summarise(
+  A1.means = A1.dat %>% group_by(True.omega.3.value, True.CV, Sites) %>%   summarise(
     "$BUSTED \\omega_3$ MLE" = mean(busted.omega.3.rate, na.rm = T),
     "SRV $\\omega_3$ MLE" = mean(srv.omega.3.rate, na.rm = T),
     "Mean CV" = mean(CV.SRV, na.rm = T)
   )
-  A1.pwr.tab = full_join(A1.pwr.tab, A1.means, by = c("True.omega.3.value", "True.CV"))
+  A1.pwr.tab = full_join(A1.pwr.tab, A1.means, by = c("True.omega.3.value", "True.CV", "Sites"))
   A1.pwr.tab = replace(A1.pwr.tab, is.na(A1.pwr.tab), 0)
   A1.pwr.tab$BUSTED_PWR = A1.pwr.tab$BUSTED_PWR / A1.pwr.tab$num_reps
   A1.pwr.tab$SRV_PWR = A1.pwr.tab$SRV_PWR / A1.pwr.tab$num_reps
@@ -52,10 +52,10 @@ plot_pwr_lines <- function(pwr.tab){
 
 plot_pwr_tile <- function(pwr.tab){
   temp=   pwr.tab %>% select(one_of(
-    c("True.omega.3.value", "True.CV", "BUSTED_PWR", "SRV_PWR")
-  )) %>% filter(True.omega.3.value >= 1.1  && True.CV != 1.031) %>% melt(id.vars = c("True.omega.3.value", "True.CV"))
-  temp %>% ggplot(aes(x=True.omega.3.value, y = True.CV))+ geom_tile(aes(fill = value))+ facet_grid(~variable)+
-    labs(x =expression("True "*omega[3]), y = "True CV of SRV", color = "Power")
+    c("True.omega.3.value", "True.CV", "BUSTED_PWR", "SRV_PWR", "Sites")
+  )) %>% filter(True.omega.3.value >= 1.1  && True.CV != 1.031) %>% melt(id.vars = c("True.omega.3.value", "True.CV", "Sites"))
+  temp %>% ggplot(aes(y=True.omega.3.value, x = True.CV))+ geom_tile(aes(fill = value))+ facet_grid(Sites~variable)+
+    labs(y =expression("True "*omega[3]), x = "True CV of SRV", color = "Power")
 }
 
 var = "omega.1"
