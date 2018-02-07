@@ -26,8 +26,8 @@ compile <- function(dir,csv){
   #increments of two because want one line for each rep that includes BUSTED and BUSTED-SRV info
   for (i in  seq(from=1, to=length(srv.jsons), by=1)){
     filepath = paste(dir,srv.jsons[i], sep="") #file path of the current json
-    
-    test = filepath %>% readLines() %>% gsub(x=.,pattern="^nan",replacement ='"NA"', perl = TRUE) %>% fromJSON() #read the JSON in
+    print(filepath)
+    test = filepath %>% readLines() %>% gsub(x=.,pattern="^nan$",replacement ='"NA"', perl = TRUE) %>% fromJSON() #read the JSON in
 
       #have to account for weird behavior caused by nan vs NA 
       
