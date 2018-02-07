@@ -32,7 +32,7 @@ compile <- function(dir,csv){
       
       FILE = test$input$`file name` #get name of file (useful for matching later)
       Sites = test$input$`number of sites` #get number of nucleotide sites
-      
+      print(FILE)
       tree_string = test$input$trees$`0` # get tree string
       
       
