@@ -18,7 +18,7 @@ compile <- function(dir,csv){
   busted.jsons <- list.files(path = dir,
                          pattern = '*BUSTED.json', recursive = TRUE)
   
-  print(dir)
+
   df.SRV<- NULL
   df.BUSTED <- NULL
   #create a table with 78 variables to fill 
@@ -34,7 +34,7 @@ compile <- function(dir,csv){
       FILE = test$input$`file name` #get name of file (useful for matching later)
       
       Sites = test$input$`number of sites` #get number of nucleotide sites
-      print(FILE)
+      
       tree_string = test$input$trees$`0` # get tree string
       
       
