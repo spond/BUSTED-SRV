@@ -27,7 +27,7 @@ compile <- function(dir,csv){
   for (i in  seq(from=1, to=length(srv.jsons), by=1)){
     filepath = paste(dir,srv.jsons[i], sep="") #file path of the current json
     
-   test = filepath %>% readLines() %>% gsub(x=.,pattern="nan",replacement ='"NA"') %>% fromJSON() #read the JSON in
+   test = filepath %>% readLines() %>% gsub(x=.,pattern="nan",replacement ='"NA"', fixed = TRUE) %>% fromJSON() #read the JSON in
       #have to account for weird behavior caused by nan vs NA 
       
 
