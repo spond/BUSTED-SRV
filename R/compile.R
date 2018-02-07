@@ -10,7 +10,6 @@ library(dplyr)
 
 
 
-
 compile <- function(dir,csv){
   #function reads BUSTED.JSONs and BUSTED_SRV.JSONS into a *.csv format
   #the csv can then be more easily used in R 
@@ -30,7 +29,9 @@ compile <- function(dir,csv){
    test = filepath %>% readLines() %>% gsub(x=.,pattern="nan",replacement ='"NA"') %>% fromJSON() #read the JSON in
       #have to account for weird behavior caused by nan vs NA 
       
+
       FILE = test$input$`file name` #get name of file (useful for matching later)
+      print(FILE)
       Sites = test$input$`number of sites` #get number of nucleotide sites
       
       tree_string = test$input$trees$`0` # get tree string
@@ -155,6 +156,7 @@ simulation_inputs <- function(dir,csv){
   #loop thru each file to get info in correct format
   for(i in seq(from = 1, to= length(list))){
     x=readLines(paste(dir,list[i], sep = "/"))
+
     #making this a readable json
     
     x1 = x[2:(length(x)-1)]  %>% gsub(x=.,pattern="\\{",replacement ='\\[') %>% gsub(x=.,pattern ="\\}", replacement ="\\]")
