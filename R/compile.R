@@ -88,7 +88,7 @@ compile <- function(dir,csv){
   for (i in  seq(from=1, to=length(busted.jsons), by=1)){ 
    
       filepath = paste(dir,busted.jsons[i], sep="")
-      test = filepath %>% readLines() %>% gsub(x=.,pattern="nan",replacement ='"NA"') %>% fromJSON() #read the JSON in
+      test = filepath %>% readLines() %>% gsub(x=.,pattern="^nan$",replacement ='"NA"', perl = TRUE) %>% fromJSON() #read the JSON in
       #have to account for weird behavior caused by nan vs NA 
       
       FILE = test$input$`file name` #get name of file (useful for matching later)
