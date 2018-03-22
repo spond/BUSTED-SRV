@@ -139,7 +139,8 @@ compile <- function(dir,csv){
     
     
   }
-
+  df.BUSTED$FILE <- str_replace(df.BUSTED$FILE, "//", "/") 
+  df.SRV$FILE <- str_replace(df.SRV$FILE, "//", "/") 
   temp <- full_join(df.BUSTED,df.SRV,by=c("FILE","Sites","Sequences"))
   write.csv(file = csv, x = temp, row.names= F)
   
