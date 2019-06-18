@@ -1,38 +1,63 @@
+RequireVersion ("2.3.3");
 LoadFunctionLibrary ("GrabBag");
+AUTOMATICALLY_CONVERT_BRANCH_LENGTHS = 1;
 
 SetDialogPrompt ("Load a BUSTED likelihood function fit (BUSTED.lf.bf) extension:");
 ExecuteAFile (PROMPT_FOR_FILE);
 
+GetString (lfname, LikelihoodFunction,0);
+GetString (treeName, Tree, 0);
+fprintf (stdout, "\n LF BEFORE: \n", lfname, " \n "); 
+bl.b4 = BranchLength(^(treeName), -1);
+bl.exp.b4 = BranchLength(^(treeName), "NMUR2_MELGA;EXPECTED_NUMBER_OF_SUBSTITUTIONS");
+fprintf ( stdout, "\n BRANCH LENGHTS B4: \n",  bl.b4, "\n", bl.exp.b4,"\n");
+
 fit_info = report_loaded_fit  ();
+
 
 fprintf (stdout, "\n\nLoaded the following information\n\n", fit_info);
 
 prompt_for_alphas (fit_info["alpha rate count"]);
 prompt_for_omegas (fit_info["omega rate count"]);
 
+
+
 sim_info = report_loaded_fit();
+
+
+GetString (lfname, LikelihoodFunction,0);
+fprintf (stdout, "\n LF AFTER: \n",lfname, "\n "); 
+bl.after = BranchLength(^(treeName), -1);
+bl.exp.after  = BranchLength(^(treeName), "NMUR2_MELGA");
+fprintf ( stdout, "\n BRANCH LENGHTS after: \n",  bl.after, "\n EXPRESSION FOR NMUR2_MELGA?? \n", bl.exp.after,"\n");
 
 fprintf (stdout, "\n\nUsing this information for the simulations\n\n", sim_info, "\n\n");
 
 replicates = prompt_for_a_value ("How many replicates", 100, 1, 10000, 1);
 
-SetDialogPrompt ("Set simulation information and repliates (with .xx extensions) to");
+SetDialogPrompt ("Set simulation information and replicates (with .xx extensions) to");
 fprintf (PROMPT_FOR_FILE, CLEAR_FILE, sim_info);
 sim_path = LAST_FILE_PATH;
 
 DATA_FILE_PRINT_FORMAT = 9; // FASTA
 
-for (repl = 1; repl < replicates; repl += 1) {
+charactersUniversalCode = {{"A","C","G","T"} {"3","TAA,TAG,TGA","",""}};
+
+
+
+for (repl = 1; repl <= replicates; repl += 1) {
     fprintf (stdout, "Simulating replicate ", repl, " / ", replicates, "\n");
-    DataSet simfile = SimulateDataSet ( busted.LF );
+    //DataSet simfile = SimulateDataSet (lfname, "", rates);
+    // fprintf (stdout, rates);
+    DataSet simfile = Simulate (^(treeName), busted.test_pi, charactersUniversalCode, 1000);
     DataSetFilter simnucs = CreateFilter (simfile, 1);
     fprintf (sim_path + "_replicate." + repl, CLEAR_FILE, simnucs);
 }
 
 function report_loaded_fit () {
-    GetInformation (omega.weights, "^FG_f_[0-9]+$");
-    GetInformation (srv.weights,   "^srv.f_[0-9]+$");
-    
+    GetInformation (omega.weights, "^busted.test.bsrel_mixture_aux_[0-9]+$");
+    GetInformation (srv.weights,   "^busted.test.rv_gdd_weights_[0-9]+$");
+     
     
     omega.rates = Columns (omega.weights) + 1;
     srv.rates   = Columns (srv.weights) + 1;
@@ -40,11 +65,11 @@ function report_loaded_fit () {
     omega.distribution = {omega.rates, 2};
     srv.distribution          = {srv.rates, 2};
     
-    extract_distribution (omega.distribution, omega.rates, "FG_omega_", "FG_f_", "1", );
-    extract_distribution (srv.distribution, srv.rates, "srv.syn_rate_", "srv.f_", "busted.srv.cat.normalizer");
+    extract_distribution (omega.distribution, omega.rates, "busted.test.omega", "busted.test.bsrel_mixture_aux_", "1", );
+    extract_distribution (srv.distribution, srv.rates, "busted.test.rv_gdd_rates_", "busted.test.rv_gdd_weights_", "busted.test.rv_gdd_norm");
    
-    return { "sequences" : codon_filter.species,
-             "sites" : codon_filter.sites, 
+    return { "sequences" : busted_srv.codon_data.species,
+             "sites" : busted_srv.codon_data.sites, 
              "alpha rate count" : srv.rates,
              "alpha distribution" :  srv.distribution,
              "omega rate count" : omega.rates,
@@ -55,6 +80,7 @@ function report_loaded_fit () {
 
 function extract_distribution (matrix, rates, rate_prefix, weight_prefix, normalizer) {
     left_over_weight = 1;
+	fprintf(stdout, "\n This is the normalizer", busted.test.rv_gdd_norm);
     for (k = 1; k <= rates; k += 1) {
         matrix [k-1][0] = Eval (rate_prefix + k + "/" + normalizer);
         if (k < omega.rates) {
@@ -68,16 +94,16 @@ function extract_distribution (matrix, rates, rate_prefix, weight_prefix, normal
 }
 
 function prompt_for_alphas (rate_count) {
-    leftover_weight = 1;
-    current_rate     = 1;
+    leftover_weight  = 1;
+    current_rate     = 1; //alphas start at 1 now (this changes occasionally)
     
     fprintf (stdout, "\nSpecify the alpha distribution to be used for simulation (remember that it will be normalized to have mean 1)\n");
-    
+    fprintf (stdout, rate_count);
     while (current_rate <= rate_count && leftover_weight > 0) {
-        Eval ("srv.syn_rate_" + current_rate + " = " + prompt_for_a_value ("alpha rate [" + current_rate + "]", 2*current_rate / rate_count, 0, 1000,  0));
+        Eval ("busted.test.rv_gdd_rates_" + current_rate + " = " + prompt_for_a_value ("alpha rate [" + current_rate + "]", 2*(current_rate) / rate_count, 0, 1000,  0));
         if (current_rate < rate_count) {
             new_weight = prompt_for_a_value ("alpha weight [" + current_rate + "]", leftover_weight / (rate_count - current_rate + 1), 0, leftover_weight,  0);
-            Eval ("srv.f_" + current_rate + " = " + new_weight / leftover_weight);
+            Eval ("busted.test.rv_gdd_weights_" + current_rate + " = " + new_weight / leftover_weight);
             leftover_weight = leftover_weight - new_weight;
         }
         //prompt_for_a_value ("
@@ -86,19 +112,20 @@ function prompt_for_alphas (rate_count) {
 }
 
 function prompt_for_omegas (rate_count) {
-    leftover_weight = 1;
-    current_rate     = 1;
+    leftover_weight  = 1;
+    current_rate     = 1; //omegas start at 1
     
-    fprintf (stdout, "\nSpecify the alpha omega to be used for simulation (remember that only the last omega value is permitted to be in the [1, infty) range)\n");
+    fprintf (stdout, "\nSpecify the omega distribution to be used for simulation (remember that only the last omega value is permitted to be in the [1, infty) range)\n");
     
     while (current_rate <= rate_count && leftover_weight > 0) {
         if (current_rate < rate_count) {
-            Eval ("FG_omega_" + current_rate + " = " + prompt_for_a_value ("omega [" + current_rate + "]", current_rate / rate_count, 0, 1,  0));
-            new_weight = prompt_for_a_value ("omega weight [" + current_rate + "]", leftover_weight / (rate_count - current_rate + 1), 0, leftover_weight,  0);
-            Eval ("FG_f_" + current_rate + " = " + new_weight / leftover_weight);
+            Eval ("busted.test.omega" + current_rate + " = " + prompt_for_a_value ("omega [" + current_rate + "]", (current_rate) / rate_count, 0, 1,  0));
+            new_weight = prompt_for_a_value ("omega weight [" + current_rate + "]", leftover_weight / (rate_count - current_rate + 1 ), 0, leftover_weight,  0);
+            Eval ("busted.test.bsrel_mixture_aux_" + (current_rate) + " = " + new_weight / leftover_weight);
             leftover_weight = leftover_weight - new_weight;
         } else {
-            Eval ("FG_omega_" + current_rate + " = " + prompt_for_a_value ("omega [" + current_rate + "]", 3, 1, 1000,  0));
+			fprintf(stdout,current_rate);
+            Eval ("busted.test.omega" + current_rate + " = " + prompt_for_a_value ("omega [" + current_rate + "]", 3, 1, 1000,  0));
         
         }
         //prompt_for_a_value ("
