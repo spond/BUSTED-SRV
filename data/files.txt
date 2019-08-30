@@ -1,5 +1,0 @@
-/home3/sadie/BUSTED-SRV/data/sim-10-24-17
-/home3/sadie/BUSTED-SRV/data/sim-10-24-17_replicate.1
-/home3/sadie/BUSTED-SRV/data/sim-10-24-17_replicate.2
-/home3/sadie/BUSTED-SRV/data/sim-10-24-17_replicate.3
-/home3/sadie/BUSTED-SRV/data/sim-10-24-17_replicate.4
