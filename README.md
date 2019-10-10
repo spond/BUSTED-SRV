@@ -7,6 +7,9 @@ includes **BUSTED-SRV-sim.bf** the script used to generate simulation replicates
 **batch_script.sh** an example of the slurm batch script used to run simulation replicates through BUSTED an BUSTED[S]
 
 ## Data
+
+**to find the simulation data from the paper please visit: http://data.hyphy.org/web/busteds/***
+
 includes original examples of data and results jsons from BUSTED[S]
 
 **paper_LFs** includes likelihood function batch files (.LF.bf) used to generate the 16 sequence and 31 sequence simulation replicates in the paper as well as newick trees for both when omega = 1.
